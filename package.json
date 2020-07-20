@@ -23,7 +23,7 @@
     "svelte": "^3.20.1"
   },
   "dependencies": {
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "socket.io-client": "^2.3.0"
   }
 }
