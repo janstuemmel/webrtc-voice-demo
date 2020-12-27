@@ -6,7 +6,7 @@ const socketio = require('socket.io')
 
 const app = new Koa()
 const server = http.Server(app.callback())
-const io = socketio(server)
+const io = socketio(server, { pingInterval: 5000 })
 
 app.use(koaBody())
 app.use(serve('./dist'))
@@ -17,16 +17,16 @@ io.on('connect', socket => {
 
   socket.broadcast.emit('user:join', socket.id)
 
-  socket.on('user:rtc:offer', ({ id, offer }) => {
-    io.to(id).emit('user:rtc:offer', { id: socket.id, offer })
+  socket.on('user:rtc:offer', ({ remoteId, offer }) => {
+    io.to(remoteId).emit('user:rtc:offer', { remoteId: socket.id, offer })
   })
 
-  socket.on('user:rtc:answer', ({ id, answer }) => {
-    io.to(id).emit('user:rtc:answer', { id: socket.id, answer })
+  socket.on('user:rtc:answer', ({ remoteId, answer }) => {
+    io.to(remoteId).emit('user:rtc:answer', { remoteId: socket.id, answer })
   })
 
-  socket.on('user:rtc:candidate', ({ id, candidate }) => {
-    io.to(id).emit('user:rtc:candidate', { id: socket.id, candidate })
+  socket.on('user:rtc:candidate', ({ remoteId, candidate }) => {
+    io.to(remoteId).emit('user:rtc:candidate', { remoteId: socket.id, candidate })
   })
 
   socket.on('disconnect', () => {
